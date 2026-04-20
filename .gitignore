@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .streamlit/secrets.toml.streamlit/secrets.toml
 .streamlit/secrets.toml
+
+.env
+.streamlit/secrets.toml
+__pycache__/
+*.pyc
