@@ -5,84 +5,127 @@ from utils.chunker import chunk_text
 from utils.summarizer import generate_summary
 from utils.downloader import make_txt
 
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="AI Summarizer App",
+    page_title="AI Document Summarizer",
     page_icon="📄",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# ---------- Custom CSS ----------
+# ---------------- CUSTOM CSS ----------------
 st.markdown("""
 <style>
-.main-title {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 5px;
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
+
+.main-title {
+    font-size: 44px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0px;
+}
+
 .sub-title {
     color: #6b7280;
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 17px;
+    margin-bottom: 25px;
 }
+
 .card {
-    padding: 22px;
-    border-radius: 16px;
-    background: #f8fafc;
+    background: #ffffff;
     border: 1px solid #e5e7eb;
-    min-height: 420px;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    min-height: 520px;
 }
-.small-muted {
-    color: #6b7280;
-    font-size: 14px;
-}
-.word-box {
-    padding: 6px 10px;
-    border-radius: 10px;
+
+.metric-box {
     background: #eef2ff;
+    padding: 7px 12px;
+    border-radius: 10px;
     display: inline-block;
     font-size: 13px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    color: #3730a3;
+    font-weight: 600;
 }
-.footer-note {
+
+.footer {
     text-align:center;
     color:#6b7280;
     font-size:13px;
-    margin-top:30px;
+    margin-top:40px;
+}
+
+.upload-box {
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.stButton>button {
+    background: linear-gradient(90deg,#4f46e5,#7c3aed);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    font-weight: 700;
+}
+
+.stDownloadButton>button {
+    border-radius: 10px;
+    font-weight: 600;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Header ----------
-st.markdown('<div class="main-title">📄 AI Summarizer App</div>', unsafe_allow_html=True)
+# ---------------- HEADER ----------------
+st.markdown('<div class="main-title">📄 AI Document Summarizer</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="sub-title">Upload TXT / PDF / DOCX files and generate concise summaries in English and Hindi (max 500 words each).</div>',
+    '<div class="sub-title">Upload TXT, PDF, or DOCX files and generate precise bilingual summaries in English and Hindi (300–500 words each).</div>',
     unsafe_allow_html=True
 )
 
-# ---------- Sidebar ----------
+# ---------------- SIDEBAR ----------------
 with st.sidebar:
-    st.header("⚙️ Instructions")
-    st.write("1. Upload a file")
+    st.header("⚙️ How It Works")
+    st.write("1. Upload your file")
     st.write("2. Click Generate Summary")
-    st.write("3. View and download results")
+    st.write("3. View English & Hindi output")
+    st.write("4. Download summaries")
+    
     st.divider()
-    st.write("Supported Formats:")
+    
+    st.subheader("📌 Supported Formats")
     st.write("• TXT")
     st.write("• PDF")
     st.write("• DOCX")
 
-# ---------- Upload ----------
+    st.divider()
+
+    st.subheader("📊 Summary Rules")
+    st.write("• AI generated")
+    st.write("• Precise & informative")
+    st.write("• 300 to 500 words")
+    st.write("• Bilingual output")
+
+# ---------------- FILE UPLOAD ----------------
 uploaded_file = st.file_uploader(
-    "Upload your document",
+    "Upload Document",
     type=["txt", "pdf", "docx"]
 )
 
-# ---------- Generate ----------
+# ---------------- MAIN LOGIC ----------------
 if uploaded_file:
-    st.success(f"Uploaded: {uploaded_file.name}")
+
+    st.success(f"✅ Uploaded Successfully: {uploaded_file.name}")
 
     if st.button("✨ Generate Summary", use_container_width=True):
-        with st.spinner("Analyzing document and generating summaries..."):
+
+        with st.spinner("Reading document carefully and generating summaries..."):
 
             text = extract_text(uploaded_file)
             text = clean_text(text)
@@ -92,7 +135,9 @@ if uploaded_file:
                 st.stop()
 
             chunks = chunk_text(text)
-            combined_text = chunks[0]  # token efficient
+
+            # first chunk for token safety
+            combined_text = chunks[0]
 
             english, hindi = generate_summary(combined_text)
 
@@ -104,36 +149,44 @@ if uploaded_file:
 
         col1, col2 = st.columns(2, gap="large")
 
-        # English Card
+        # ---------- English ----------
         with col1:
             st.markdown('<div class="card">', unsafe_allow_html=True)
             st.subheader("🇬🇧 English Summary")
-            st.markdown(f'<div class="word-box">Words: {eng_words} / 500</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="metric-box">Words: {eng_words} / 500</div>',
+                unsafe_allow_html=True
+            )
             st.write(english)
+
             st.download_button(
-                "⬇️ Download English Summary",
+                label="⬇️ Download English Summary",
                 data=make_txt(english),
                 file_name="english_summary.txt",
                 use_container_width=True
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # Hindi Card
+        # ---------- Hindi ----------
         with col2:
             st.markdown('<div class="card">', unsafe_allow_html=True)
             st.subheader("🇮🇳 Hindi Summary")
-            st.markdown(f'<div class="word-box">Words: {hin_words} / 500</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="metric-box">Words: {hin_words} / 500</div>',
+                unsafe_allow_html=True
+            )
             st.write(hindi)
+
             st.download_button(
-                "⬇️ Download Hindi Summary",
+                label="⬇️ Download Hindi Summary",
                 data=make_txt(hindi),
                 file_name="hindi_summary.txt",
                 use_container_width=True
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------- Footer ----------
+# ---------------- FOOTER ----------------
 st.markdown(
-    '<div class="footer-note">Built with Python + Streamlit + Groq AI</div>',
+    '<div class="footer">Built with Python • Streamlit • Groq AI</div>',
     unsafe_allow_html=True
 )
