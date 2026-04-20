@@ -8,6 +8,10 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
+def word_count(text):
+    return len(text.split())
+
+
 def limit_words(text, max_words=500):
     words = text.split()
     return " ".join(words[:max_words]).strip()
@@ -19,26 +23,41 @@ def clean_output(text):
     return text.strip()
 
 
+def pad_if_too_short(text, minimum=300):
+    """
+    If model returns too short content, keep as-is.
+    We guide the model strongly in prompt, so this is mainly fallback.
+    """
+    return text.strip()
+
+
 def generate_summary(text):
     prompt = f"""
-You are an expert summarizer.
+You are an expert analyst and summarizer.
 
-Read the document carefully and create TWO summaries.
+Read the document VERY CAREFULLY and understand the complete context before writing.
+
+Create TWO summaries:
+1. English Summary
+2. Hindi Summary
 
 STRICT RULES:
-1. English Summary must be NO MORE THAN 500 WORDS.
-2. Hindi Summary must be NO MORE THAN 500 WORDS.
-3. Keep both summaries concise and focused.
-4. Include only key points.
-5. No introductions, no explanations, no filler text.
+- Each summary should be between 300 and 500 words.
+- Never exceed 500 words.
+- Include all major points, insights, findings, conclusions, and relevant details.
+- Be concise but informative.
+- Do not make it too short.
+- Do not repeat points.
+- Use clear professional language.
+- Preserve factual meaning.
 
 Return EXACTLY in this format:
 
 ### English Summary
-<summary>
+<300 to 500 words summary>
 
 ### Hindi Summary
-<summary>
+<300 to 500 words summary>
 
 Document:
 {text}
@@ -63,7 +82,10 @@ Document:
         english = output.strip()
         hindi = "Hindi summary could not be generated."
 
-    # Hard enforce limits separately
+    english = pad_if_too_short(english, 300)
+    hindi = pad_if_too_short(hindi, 300)
+
+    # Hard cap max 500 words
     english = limit_words(english, 500)
     hindi = limit_words(hindi, 500)
 
