@@ -1,0 +1,1 @@
+Uses Gemini 1.5 Flash model through google-generativeai SDK.
