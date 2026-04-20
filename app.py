@@ -100,9 +100,13 @@ with st.sidebar:
     st.divider()
     
     st.subheader("📌 Supported Formats")
-    st.write("• TXT")
-    st.write("• PDF")
-    st.write("• DOCX")
+    st.write("• TXT Documents")
+    st.write("• PDF Files")
+    st.write("• DOCX Files")
+    st.write("• PPTX Presentations")
+    st.write("• PNG Images")
+    st.write("• JPG Images")
+    st.write("• JPEG Images")
 
     st.divider()
 
