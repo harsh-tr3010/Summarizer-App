@@ -4,3 +4,7 @@ PyPDF2
 python-docx
 python-dotenv
 fpdf
+pillow
+pytesseract
+python-pptx
+pdf2image

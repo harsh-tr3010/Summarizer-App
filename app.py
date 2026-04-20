@@ -115,7 +115,7 @@ with st.sidebar:
 # ---------------- FILE UPLOAD ----------------
 uploaded_file = st.file_uploader(
     "Upload Document",
-    type=["txt", "pdf", "docx"]
+    type=["txt","pdf","docx","pptx","png","jpg","jpeg"]
 )
 
 # ---------------- MAIN LOGIC ----------------
