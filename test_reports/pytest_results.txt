@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.1, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/python/3.12.1/bin/python3
+cachedir: .pytest_cache
+rootdir: /workspaces/Summarizer-App
+configfile: pytest.ini
+plugins: anyio-4.12.1
+collecting ... collected 8 items
+
+tests/test_parser.py::test_sample_1_pdf_exists PASSED                    [ 12%]
+tests/test_parser.py::test_sample_2_pdf_exists PASSED                    [ 25%]
+tests/test_parser.py::test_extract_text_sample_1 PASSED                  [ 37%]
+tests/test_parser.py::test_extract_text_sample_2 PASSED                  [ 50%]
+tests/test_summary.py::test_sample_1_pdf_exists PASSED                   [ 62%]
+tests/test_summary.py::test_sample_2_pdf_exists PASSED                   [ 75%]
+tests/test_summary.py::test_extract_text_sample_1 PASSED                 [ 87%]
+tests/test_summary.py::test_extract_text_sample_2 PASSED                 [100%]
+
+=============================== warnings summary ===============================
+../../usr/local/python/3.12.1/lib/python3.12/site-packages/PyPDF2/__init__.py:21
+  /usr/local/python/3.12.1/lib/python3.12/site-packages/PyPDF2/__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 8 passed, 1 warning in 1.65s =========================
