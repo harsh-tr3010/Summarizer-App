@@ -1,27 +1,51 @@
-from utils.summarizer import limit_words, word_count
+import os
+from utils.file_parser import extract_text
+
+SAMPLE_DIR = "sample_files"
 
 
-def test_limit_words_max_500():
-    text = "word " * 600
-    result = limit_words(text, 500)
+class UploadedFileMock:
+    def __init__(self, path):
+        self.path = path
+        self.name = os.path.basename(path)
+        self.file = open(path, "rb")
 
-    assert len(result.split()) == 500
+    def read(self, *args):
+        return self.file.read(*args)
+
+    def seek(self, offset, whence=0):
+        return self.file.seek(offset, whence)
+
+    def tell(self):
+        return self.file.tell()
+
+    def close(self):
+        self.file.close()
 
 
-def test_limit_words_less_than_500():
-    text = "word " * 100
-    result = limit_words(text, 500)
-
-    assert len(result.split()) == 100
+def test_sample_1_pdf_exists():
+    assert os.path.exists(f"{SAMPLE_DIR}/Sample_1.pdf")
 
 
-def test_word_count():
-    text = "Hello world test case"
-    assert word_count(text) == 4
+def test_sample_2_pdf_exists():
+    assert os.path.exists(f"{SAMPLE_DIR}/Sample_2.pdf")
 
 
-def test_limit_words_returns_string():
-    text = "hello world"
-    result = limit_words(text, 500)
+def test_extract_text_sample_1():
+    file = UploadedFileMock(f"{SAMPLE_DIR}/Sample_1.pdf")
+    text = extract_text(file)
 
-    assert isinstance(result, str)
+    assert isinstance(text, str)
+    assert len(text.strip()) > 20
+
+    file.close()
+
+
+def test_extract_text_sample_2():
+    file = UploadedFileMock(f"{SAMPLE_DIR}/Sample_2.pdf")
+    text = extract_text(file)
+
+    assert isinstance(text, str)
+    assert len(text.strip()) > 20
+
+    file.close()

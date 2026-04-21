@@ -8,13 +8,19 @@ class UploadedFileMock:
     def __init__(self, path):
         self.path = path
         self.name = os.path.basename(path)
+        self.file = open(path, "rb")
 
-    def read(self):
-        with open(self.path, "rb") as f:
-            return f.read()
+    def read(self, *args):
+        return self.file.read(*args)
 
-    def seek(self, pos):
-        pass
+    def seek(self, offset, whence=0):
+        return self.file.seek(offset, whence)
+
+    def tell(self):
+        return self.file.tell()
+
+    def close(self):
+        self.file.close()
 
 
 def test_sample_1_pdf_exists():
@@ -32,6 +38,8 @@ def test_extract_text_sample_1():
     assert isinstance(text, str)
     assert len(text.strip()) > 20
 
+    file.close()
+
 
 def test_extract_text_sample_2():
     file = UploadedFileMock(f"{SAMPLE_DIR}/Sample_2.pdf")
@@ -39,3 +47,5 @@ def test_extract_text_sample_2():
 
     assert isinstance(text, str)
     assert len(text.strip()) > 20
+
+    file.close()
