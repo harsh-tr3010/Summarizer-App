@@ -52,7 +52,7 @@ def extract_text(uploaded_file):
 
         return text
 
-    # Images
+    
     elif file_type in ["png", "jpg", "jpeg"]:
         image = Image.open(uploaded_file)
         return pytesseract.image_to_string(image)

@@ -85,7 +85,7 @@ Document:
     english = pad_if_too_short(english, 300)
     hindi = pad_if_too_short(hindi, 300)
 
-    # Hard cap max 500 words
+    
     english = limit_words(english, 500)
     hindi = limit_words(hindi, 500)
 
