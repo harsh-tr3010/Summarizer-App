@@ -151,7 +151,7 @@ if uploaded_file:
         st.divider()
         st.subheader("Generated Summaries")
 
-        col1, col2 = st.columns(2, gap="large")
+        
 
         
         with col1:
