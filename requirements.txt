@@ -8,3 +8,4 @@ pillow
 pytesseract
 python-pptx
 pdf2image
+pytest
