@@ -10,27 +10,27 @@ from pdf2image import convert_from_bytes
 def extract_text(uploaded_file):
     file_type = uploaded_file.name.split(".")[-1].lower()
 
-    # TXT
+    
     if file_type == "txt":
         return uploaded_file.read().decode("utf-8")
 
-    # DOCX
+    
     elif file_type == "docx":
         doc = docx.Document(uploaded_file)
         return "\n".join([p.text for p in doc.paragraphs])
 
-    # PDF
+    
     elif file_type == "pdf":
         text = ""
 
-        # Normal text extraction
+        
         reader = PyPDF2.PdfReader(uploaded_file)
         for page in reader.pages:
             page_text = page.extract_text()
             if page_text:
                 text += page_text + "\n"
 
-        # OCR pages if little text
+        
         if len(text.strip()) < 50:
             uploaded_file.seek(0)
             images = convert_from_bytes(uploaded_file.read())
@@ -40,7 +40,7 @@ def extract_text(uploaded_file):
 
         return text
 
-    # PPTX
+    
     elif file_type == "pptx":
         prs = Presentation(uploaded_file)
         text = ""

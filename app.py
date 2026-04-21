@@ -5,7 +5,7 @@ from utils.chunker import chunk_text
 from utils.summarizer import generate_summary
 from utils.downloader import make_txt
 
-# ---------------- PAGE CONFIG ----------------
+
 st.set_page_config(
     page_title="AI Document Summarizer",
     page_icon="📄",
@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ---------------- CUSTOM CSS ----------------
+
 st.markdown("""
 <style>
 .block-container {
@@ -82,16 +82,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- HEADER ----------------
-st.markdown('<div class="main-title">📄 AI Document Summarizer</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="main-title">AI Document Summarizer</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="sub-title">Upload TXT, PDF, or DOCX files and generate precise bilingual summaries in English and Hindi (300–500 words each).</div>',
     unsafe_allow_html=True
 )
 
-# ---------------- SIDEBAR ----------------
+
 with st.sidebar:
-    st.header("⚙️ How It Works")
+    st.header("How It Works")
     st.write("1. Upload your file")
     st.write("2. Click Generate Summary")
     st.write("3. View English & Hindi output")
@@ -99,7 +99,7 @@ with st.sidebar:
     
     st.divider()
     
-    st.subheader("📌 Supported Formats")
+    st.subheader("Supported Formats")
     st.write("• TXT Documents")
     st.write("• PDF Files")
     st.write("• DOCX Files")
@@ -110,24 +110,24 @@ with st.sidebar:
 
     st.divider()
 
-    st.subheader("📊 Summary Rules")
+    st.subheader("Summary Rules")
     st.write("• AI generated")
     st.write("• Precise & informative")
     st.write("• 300 to 500 words")
     st.write("• Bilingual output")
 
-# ---------------- FILE UPLOAD ----------------
+
 uploaded_file = st.file_uploader(
     "Upload Document",
     type=["txt","pdf","docx","pptx","png","jpg","jpeg"]
 )
 
-# ---------------- MAIN LOGIC ----------------
+
 if uploaded_file:
 
-    st.success(f"✅ Uploaded Successfully: {uploaded_file.name}")
+    st.success(f"Uploaded Successfully: {uploaded_file.name}")
 
-    if st.button("✨ Generate Summary", use_container_width=True):
+    if st.button("Generate Summary", use_container_width=True):
 
         with st.spinner("Reading document carefully and generating summaries..."):
 
@@ -140,7 +140,7 @@ if uploaded_file:
 
             chunks = chunk_text(text)
 
-            # first chunk for token safety
+            
             combined_text = chunks[0]
 
             english, hindi = generate_summary(combined_text)
@@ -149,11 +149,11 @@ if uploaded_file:
             hin_words = len(hindi.split())
 
         st.divider()
-        st.subheader("📌 Generated Summaries")
+        st.subheader("Generated Summaries")
 
         col1, col2 = st.columns(2, gap="large")
 
-        # ---------- English ----------
+        
         with col1:
             st.markdown('<div class="card">', unsafe_allow_html=True)
             st.subheader("🇬🇧 English Summary")
@@ -164,14 +164,14 @@ if uploaded_file:
             st.write(english)
 
             st.download_button(
-                label="⬇️ Download English Summary",
+                label="Download English Summary",
                 data=make_txt(english),
                 file_name="english_summary.txt",
                 use_container_width=True
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # ---------- Hindi ----------
+        
         with col2:
             st.markdown('<div class="card">', unsafe_allow_html=True)
             st.subheader("🇮🇳 Hindi Summary")
@@ -182,14 +182,14 @@ if uploaded_file:
             st.write(hindi)
 
             st.download_button(
-                label="⬇️ Download Hindi Summary",
+                label="Download Hindi Summary",
                 data=make_txt(hindi),
                 file_name="hindi_summary.txt",
                 use_container_width=True
             )
             st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------------- FOOTER ----------------
+
 st.markdown(
     '<div class="footer">Built with Python • Streamlit • Groq AI</div>',
     unsafe_allow_html=True

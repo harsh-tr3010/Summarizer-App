@@ -1,1 +1,1 @@
-Uses Gemini 1.5 Flash model through google-generativeai SDK.
+Uses Groq API with the Llama 3.1 8B Instant model for bilingual document summarization.
