@@ -2,8 +2,8 @@
 
 Upload TXT / PDF / DOCX files and get summaries in:
 
-- English
-- Hindi
+English
+Hindi
 
 ## Run
 
